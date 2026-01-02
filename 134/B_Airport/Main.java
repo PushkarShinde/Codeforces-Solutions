@@ -7,13 +7,30 @@ public class Main {
     static PrintWriter out = new PrintWriter(System.out);
 
     public static void main(String[] args) throws Exception {
-        int t = 1;
-        t = in.nextInt(); // comment this line if there's only one test case
-
-        while (t-- > 0) {
-            solve();
+        int n=in.nextInt();
+        int m=in.nextInt();
+        PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+        for(int i=0;i<m;i++){
+            int x=in.nextInt();
+            maxHeap.add(x);
+            minHeap.add(x);
+        }
+        int max=0;
+        int p1=n, p2=n;
+        while(p1-->0){
+            int top=maxHeap.poll();
+            max+=top;
+            if(top-1>0)maxHeap.add(--top);
+        }
+        int min=0;
+        while(p2-->0){
+            int top=minHeap.poll();
+            min+=top;
+            if(top-1>0)minHeap.add(--top);
         }
 
+        out.println(max+" "+min);
         out.flush(); // Don't forget to flush output!
     }
 
@@ -48,11 +65,8 @@ public class Main {
         }
 
         int nextInt() { return Integer.parseInt(next()); }
-
         long nextLong() { return Long.parseLong(next()); }
-
         double nextDouble() { return Double.parseDouble(next()); }
-
         String nextLine() {
             try {
                 return br.readLine();
@@ -63,8 +77,13 @@ public class Main {
     }
 
     // GCD
-    static int gcd(int a, int b){
-        return b==0?a:gcd(b, a % b);
+    static long gcd(long a, long b) {
+        return b == 0 ? a : gcd(b, a % b);
+    }
+
+    // LCM
+    static long lcm(long a, long b) {
+        return a/gcd(a,b)*b;
     }
 
     // Sieve of Eratosthenes
@@ -84,7 +103,7 @@ public class Main {
     static int binarySearch(int[] arr, int target) {
         int l = 0, r = arr.length - 1;
         while (l <= r) {
-            int m = (l + r) / 2;
+            int m = l+(r-l)/ 2;
             if (arr[m] == target) return m;
             else if (arr[m] < target) l = m + 1;
             else r = m - 1;

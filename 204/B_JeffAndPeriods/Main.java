@@ -1,5 +1,8 @@
+// package B_JeffAndPeriods;
+
 import java.util.*;
 import java.io.*;
+import java.lang.reflect.Array;
 
 public class Main {
 
@@ -7,24 +10,59 @@ public class Main {
     static PrintWriter out = new PrintWriter(System.out);
 
     public static void main(String[] args) throws Exception {
-        int t = 1;
-        t = in.nextInt(); // comment this line if there's only one test case
-
-        while (t-- > 0) {
-            solve();
+        int n =in.nextInt(); 
+        int[] an=new int[n];
+        for(int i=0;i<n;i++){
+          an[i]=in.nextInt();
+        }
+        //Store: value -> [lastIndex, diff, validFlag]
+        Map<Integer,int[]> map=new HashMap<>();
+        for(int i=0;i<n;i++){
+          int x=an[i];
+          int id=i+1;
+          int[] info=map.get(x);
+          if(info==null){
+            map.put(x,new int[]{id,0,1});
+          }else{
+            int dif=id-info[0];
+            if(info[2]==1){
+              if(info[1]==0) info[1]=dif;
+              else if(info[1]!=dif){
+                info[2]=0;
+              }
+            }
+            info[0]=id;
+          }
+        }
+        
+        List<int[]> result = new ArrayList<>();
+        for (var e : map.entrySet()) {
+            int val = e.getKey();
+            int[] info = e.getValue();
+            if (info[2] == 1) result.add(new int[]{val, info[1]});
         }
 
+        result.sort(Comparator.comparingInt(a -> a[0]));
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(result.size()).append('\n');
+        for (int[] r : result) sb.append(r[0]).append(' ').append(r[1]).append('\n');
+        System.out.print(sb);
         out.flush(); // Don't forget to flush output!
     }
 
-    static void solve() {
-        // Your logic for each test case goes here
-        int n = in.nextInt();
-        int[] arr = new int[n];
-        for(int i = 0; i < n; i++) arr[i] = in.nextInt();
-
-        // Example logic:
-        out.println(Arrays.toString(arr));
+    private static int isAP(List<Integer> ap){
+      int n=ap.size();
+      if(n==1) return 0;
+      if(n==2) return ap.get(1)-ap.get(0);
+      int diff=-1;
+      for(int i=1;i<n-1;i++){
+        if(ap.get(i)-ap.get(i-1)!=ap.get(i+1)-ap.get(i)){
+          return -1;
+        }
+        diff=ap.get(i)-ap.get(i-1);
+      }
+      return diff;
     }
 
     // Fast I/O template
@@ -48,11 +86,8 @@ public class Main {
         }
 
         int nextInt() { return Integer.parseInt(next()); }
-
         long nextLong() { return Long.parseLong(next()); }
-
         double nextDouble() { return Double.parseDouble(next()); }
-
         String nextLine() {
             try {
                 return br.readLine();
@@ -63,8 +98,13 @@ public class Main {
     }
 
     // GCD
-    static int gcd(int a, int b){
-        return b==0?a:gcd(b, a % b);
+    static long gcd(long a, long b) {
+        return b == 0 ? a : gcd(b, a % b);
+    }
+
+    // LCM
+    static long lcm(long a, long b) {
+        return a/gcd(a,b)*b;
     }
 
     // Sieve of Eratosthenes
@@ -84,7 +124,7 @@ public class Main {
     static int binarySearch(int[] arr, int target) {
         int l = 0, r = arr.length - 1;
         while (l <= r) {
-            int m = (l + r) / 2;
+            int m = l+(r-l)/ 2;
             if (arr[m] == target) return m;
             else if (arr[m] < target) l = m + 1;
             else r = m - 1;

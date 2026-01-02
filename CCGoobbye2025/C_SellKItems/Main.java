@@ -7,25 +7,49 @@ public class Main {
     static PrintWriter out = new PrintWriter(System.out);
 
     public static void main(String[] args) throws Exception {
-        int t = 1;
-        t = in.nextInt(); // comment this line if there's only one test case
-
-        while (t-- > 0) {
-            solve();
+      int n=in.nextInt();
+      int k=in.nextInt(); 
+      int[] a= new int[n];
+      int[] primes=new int[1001];
+      for(int i=2;i<1001;i++){
+        int x=i;
+        int count=0;
+        for(int p=2;p*p<=x;p++){
+          while(x%p==0){
+            count++;
+            x/=p;
+          }
         }
-
-        out.flush(); // Don't forget to flush output!
+        if(x>1) count++;
+        primes[i]=count;
+      }
+      for(int i = 0; i < n; i++) a[i]=in.nextInt();
+      int res=Integer.MAX_VALUE;
+      for(int i=0;i<n-k;i++){
+        int hcf=a[i];
+        for(int j=i;j<i+k-1;j++){
+          hcf=gcd(hcf,a[j+1]);
+        }
+        int op=0;
+        for(int j=i;j<i+k;j++){
+          int val=a[j];
+          if(sieve[hcf]) op+=val/hcf;
+          op+=resolve(val,hcf);
+        }
+        res=Math.min(res,op);
+      }
+      out.println(res);
+      out.flush();
     }
+    private static int resolve(int val, int hcf){
+      int max=0;
+      while(true){
+        for(int i=0;i<1001;i++){
 
-    static void solve() {
-        // Your logic for each test case goes here
-        int n = in.nextInt();
-        int[] arr = new int[n];
-        for(int i = 0; i < n; i++) arr[i] = in.nextInt();
-
-        // Example logic:
-        out.println(Arrays.toString(arr));
-    }
+        }
+      }
+      return;
+    } 
 
     // Fast I/O template
     static class FastReader {
@@ -48,11 +72,8 @@ public class Main {
         }
 
         int nextInt() { return Integer.parseInt(next()); }
-
         long nextLong() { return Long.parseLong(next()); }
-
         double nextDouble() { return Double.parseDouble(next()); }
-
         String nextLine() {
             try {
                 return br.readLine();
@@ -63,8 +84,13 @@ public class Main {
     }
 
     // GCD
-    static int gcd(int a, int b){
-        return b==0?a:gcd(b, a % b);
+    static int gcd(int a, int b) {
+        return b == 0 ? a : gcd(b, a % b);
+    }
+
+    // LCM
+    static long lcm(long a, long b) {
+        return a/gcd(a,b)*b;
     }
 
     // Sieve of Eratosthenes
@@ -84,7 +110,7 @@ public class Main {
     static int binarySearch(int[] arr, int target) {
         int l = 0, r = arr.length - 1;
         while (l <= r) {
-            int m = (l + r) / 2;
+            int m = l+(r-l)/ 2;
             if (arr[m] == target) return m;
             else if (arr[m] < target) l = m + 1;
             else r = m - 1;

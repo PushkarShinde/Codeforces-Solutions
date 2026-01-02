@@ -7,24 +7,42 @@ public class Main {
     static PrintWriter out = new PrintWriter(System.out);
 
     public static void main(String[] args) throws Exception {
-        int t = 1;
-        t = in.nextInt(); // comment this line if there's only one test case
-
+        int t=in.nextInt(); 
+        StringBuilder res=new StringBuilder();
         while (t-- > 0) {
-            solve();
+            solve(res);
         }
-
+        System.out.println(res);
         out.flush(); // Don't forget to flush output!
     }
 
-    static void solve() {
+    static void solve(StringBuilder res) {
         // Your logic for each test case goes here
-        int n = in.nextInt();
-        int[] arr = new int[n];
-        for(int i = 0; i < n; i++) arr[i] = in.nextInt();
-
-        // Example logic:
-        out.println(Arrays.toString(arr));
+        long a= in.nextLong();
+        long b= in.nextLong();
+        String numa=Long.toBinaryString(a);
+        String numb=Long.toBinaryString(b);
+        if(numb.length()>numa.length()) {
+            res.append(-1).append('\n');
+            return;
+        }
+        if(b==a) {
+            res.append(0).append('\n');
+            return;
+        }
+        long x=a^b;
+        if(x<=a) {
+            res.append(1).append('\n')
+            .append(x).append('\n');
+            return;
+        }
+        long y = a | b;  // y >= a always
+        long op1 = a ^ y;  // First XOR: a -> y
+        long op2 = b ^ y;  // Second XOR: y -> b
+        res.append(2).append('\n')
+        .append(op1).append(" ")
+        .append(op2).append('\n');
+        return;
     }
 
     // Fast I/O template
@@ -48,11 +66,8 @@ public class Main {
         }
 
         int nextInt() { return Integer.parseInt(next()); }
-
         long nextLong() { return Long.parseLong(next()); }
-
         double nextDouble() { return Double.parseDouble(next()); }
-
         String nextLine() {
             try {
                 return br.readLine();
@@ -63,8 +78,13 @@ public class Main {
     }
 
     // GCD
-    static int gcd(int a, int b){
-        return b==0?a:gcd(b, a % b);
+    static long gcd(long a, long b) {
+        return b == 0 ? a : gcd(b, a % b);
+    }
+
+    // LCM
+    static long lcm(long a, long b) {
+        return a/gcd(a,b)*b;
     }
 
     // Sieve of Eratosthenes
@@ -84,7 +104,7 @@ public class Main {
     static int binarySearch(int[] arr, int target) {
         int l = 0, r = arr.length - 1;
         while (l <= r) {
-            int m = (l + r) / 2;
+            int m = l+(r-l)/ 2;
             if (arr[m] == target) return m;
             else if (arr[m] < target) l = m + 1;
             else r = m - 1;

@@ -7,24 +7,28 @@ public class Main {
     static PrintWriter out = new PrintWriter(System.out);
 
     public static void main(String[] args) throws Exception {
-        int t = 1;
-        t = in.nextInt(); // comment this line if there's only one test case
-
-        while (t-- > 0) {
-            solve();
+        int t =in.nextInt();
+        int sx=in.nextInt();
+        int sy=in.nextInt();
+        int ex=in.nextInt();
+        int ey=in.nextInt();
+        String dir = in.next(); 
+        int dx=ex-sx;
+        int dy=ey-sy;
+        int res=-1;
+        for(int i = 0; i < t; i++) {
+          char c = dir.charAt(i);
+          if (dx > 0 && c == 'E') dx--;
+          if (dx < 0 && c == 'W') dx++;
+          if (dy > 0 && c == 'N') dy--;
+          if (dy < 0 && c == 'S') dy++;
+          if (dx == 0 && dy == 0) {
+            res = i + 1;  // steps are 1-indexed
+            break;
+          }
         }
-
+        out.println(res);
         out.flush(); // Don't forget to flush output!
-    }
-
-    static void solve() {
-        // Your logic for each test case goes here
-        int n = in.nextInt();
-        int[] arr = new int[n];
-        for(int i = 0; i < n; i++) arr[i] = in.nextInt();
-
-        // Example logic:
-        out.println(Arrays.toString(arr));
     }
 
     // Fast I/O template
@@ -48,11 +52,8 @@ public class Main {
         }
 
         int nextInt() { return Integer.parseInt(next()); }
-
         long nextLong() { return Long.parseLong(next()); }
-
         double nextDouble() { return Double.parseDouble(next()); }
-
         String nextLine() {
             try {
                 return br.readLine();
@@ -63,8 +64,13 @@ public class Main {
     }
 
     // GCD
-    static int gcd(int a, int b){
-        return b==0?a:gcd(b, a % b);
+    static long gcd(long a, long b) {
+        return b == 0 ? a : gcd(b, a % b);
+    }
+
+    // LCM
+    static long lcm(long a, long b) {
+        return a/gcd(a,b)*b;
     }
 
     // Sieve of Eratosthenes
@@ -84,7 +90,7 @@ public class Main {
     static int binarySearch(int[] arr, int target) {
         int l = 0, r = arr.length - 1;
         while (l <= r) {
-            int m = (l + r) / 2;
+            int m = l+(r-l)/ 2;
             if (arr[m] == target) return m;
             else if (arr[m] < target) l = m + 1;
             else r = m - 1;
