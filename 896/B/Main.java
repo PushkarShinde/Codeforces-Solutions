@@ -6,6 +6,18 @@ public class Main {
   static FastReader in = new FastReader();
   static PrintWriter out = new PrintWriter(System.out);
 
+  static class City{
+    int city;
+    long x;
+    long y;
+    boolean major;
+    City(int city, long x, long y, boolean major){
+      this.city=city;
+      this.x=x;
+      this.y=y;
+      this.major=major;
+    }
+  }
   public static void main(String[] args) throws Exception {
     int t=in.nextInt(); 
     StringBuilder res=new StringBuilder();
@@ -18,26 +30,46 @@ public class Main {
 
   static void solve(StringBuilder res){
     int n=in.nextInt();
-    int p=in.nextInt();
-    long[][] cost=new long[n][2];
-    for(int i=0;i<n;i++) cost[i][0]=in.nextLong();
-    for(int i=0;i<n;i++) cost[i][1]=in.nextLong();
-    Arrays.sort(cost,(x,y)-> Long.compare(x[1],y[1]));
-    long totalCost=p;
-    long left=n-1;
-    for(long[] c: cost){
-      if(left==0) break;//khatam kar diya sabh ko!
-      long a=c[0], b=c[1];
-      if(b>=p){
-        totalCost+=((long)p*left);
-        break;
-      }else{
-        long min=Math.min(a,left);
-        totalCost+=(min*b);
-        left-=min;
-      }
+    int k=in.nextInt();
+    int a=in.nextInt();
+    int b=in.nextInt();
+
+    City[] cities=new City[n+1];
+
+    for(int i=1;i<=n;i++){
+      long x=in.nextLong();
+      long y=in.nextLong();
+      cities[i]=new City(i, x, y, i<=k);
     }
-    res.append(totalCost).append('\n');
+
+    City start=cities[a];
+    City end=cities[b];
+
+    if(start.major && end.major){
+      res.append(0).append('\n');
+      return;
+    }
+
+    long direct=Math.abs(start.x-end.x)+Math.abs(start.y-end.y);
+    long minA=Long.MAX_VALUE;
+    long minB=Long.MAX_VALUE;
+
+    for(int i=1;i<=k;i++){
+      City major=cities[i];
+      long d1 = Math.abs(start.x - major.x) + Math.abs(start.y - major.y);
+      long d2 = Math.abs(end.x - major.x) + Math.abs(end.y - major.y);
+
+      minA = Math.min(minA, d1);
+      minB = Math.min(minB, d2);
+    }
+
+    if(minA==Long.MAX_VALUE || minB==Long.MAX_VALUE){
+      res.append(direct).append('\n');
+      return;
+    }
+    
+    long viaMajor=minA+minB;
+    res.append(Math.min(direct, viaMajor)).append('\n');
   }
 
     // Fast I/O template

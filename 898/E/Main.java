@@ -18,26 +18,40 @@ public class Main {
 
   static void solve(StringBuilder res){
     int n=in.nextInt();
-    int p=in.nextInt();
-    long[][] cost=new long[n][2];
-    for(int i=0;i<n;i++) cost[i][0]=in.nextLong();
-    for(int i=0;i<n;i++) cost[i][1]=in.nextLong();
-    Arrays.sort(cost,(x,y)-> Long.compare(x[1],y[1]));
-    long totalCost=p;
-    long left=n-1;
-    for(long[] c: cost){
-      if(left==0) break;//khatam kar diya sabh ko!
-      long a=c[0], b=c[1];
-      if(b>=p){
-        totalCost+=((long)p*left);
-        break;
+    int w=in.nextInt();
+    int[] a=new int[n];
+    for(int i=0; i<n; i++) a[i]=in.nextInt();
+    int l=Integer.MAX_VALUE;
+    int r=Integer.MAX_VALUE;
+    for(int i:a){
+      l=Math.min(l, i);
+    }
+
+    int maxLevel=0;
+
+    while(l<=r){
+      int level=l+(r-l)/2;
+      int water=w;
+      boolean valid=true;
+      for(int i:a){
+        if(i<level){
+          water-=(level-i);
+        }
+        if(water<0){
+          valid=false;
+          break;
+        }
+      }
+
+      if(valid){
+        maxLevel=level;
+        l=level+1;
       }else{
-        long min=Math.min(a,left);
-        totalCost+=(min*b);
-        left-=min;
+        r=level-1;
       }
     }
-    res.append(totalCost).append('\n');
+
+    res.append(maxLevel).append('\n');
   }
 
     // Fast I/O template

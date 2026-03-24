@@ -18,26 +18,46 @@ public class Main {
 
   static void solve(StringBuilder res){
     int n=in.nextInt();
-    int p=in.nextInt();
-    long[][] cost=new long[n][2];
-    for(int i=0;i<n;i++) cost[i][0]=in.nextLong();
-    for(int i=0;i<n;i++) cost[i][1]=in.nextLong();
-    Arrays.sort(cost,(x,y)-> Long.compare(x[1],y[1]));
-    long totalCost=p;
-    long left=n-1;
-    for(long[] c: cost){
-      if(left==0) break;//khatam kar diya sabh ko!
-      long a=c[0], b=c[1];
-      if(b>=p){
-        totalCost+=((long)p*left);
-        break;
-      }else{
-        long min=Math.min(a,left);
-        totalCost+=(min*b);
-        left-=min;
-      }
+    int[] a=new int[n];
+    int[] b=new int[n];
+    Map<Integer, Integer> mapa=new HashMap<>();
+    Map<Integer, Integer> mapb=new HashMap<>();
+    for(int i=0;i<n;i++){
+      a[i]=in.nextInt();
     }
-    res.append(totalCost).append('\n');
+    for(int i=0;i<n;i++){
+      b[i]=in.nextInt();
+    }
+    int i=0;
+    while(i<n){
+      int val=a[i];
+      int count=0;
+      while(i<n && val==a[i]){
+        i++;
+        count++;
+      }
+      mapa.put(val,Math.max(mapa.getOrDefault(val,0), count));
+    }
+    i=0;
+    while(i<n){
+      int val=b[i];
+      int count=0;
+      while(i<n && val==b[i]){
+        i++;
+        count++;
+      }
+      mapb.put(val,Math.max(mapb.getOrDefault(val,0), count));
+    }
+    Set<Integer> all=new HashSet<>();
+    all.addAll(mapa.keySet());
+    all.addAll(mapb.keySet());
+    int maxCon=0;
+    for(int key: all){
+      int lena=mapa.getOrDefault(key,0);
+      int lenb=mapb.getOrDefault(key,0);
+      maxCon=Math.max(maxCon, lena+lenb);
+    }
+    res.append(maxCon).append('\n');
   }
 
     // Fast I/O template

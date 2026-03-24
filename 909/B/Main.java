@@ -18,23 +18,31 @@ public class Main {
 
   static void solve(StringBuilder res){
     int n=in.nextInt();
-    int m=in.nextInt();
-    int h=in.nextInt();
     long[] a=new long[n];
-    for(int i=0; i<n; i++) a[i]=in.nextLong();
-    long[] temp=a.clone();
-    for(int i=0;i<m;i++){
-      int b=in.nextInt();
-      long c=in.nextLong();
-      if(temp[b]+c<=h)temp[b]+=c;
-      else {
-        temp=a.clone();
+    long[] pre=new long[n];
+    for(int i=0; i<n; i++){
+      a[i]=in.nextLong();
+    }
+    pre[0]=a[0];
+    for(int i=1;i<n;i++){
+      pre[i]=pre[i-1]+a[i];
+    }
+    long ans=-1;
+
+    for(int k=1;k<=n;k++){
+      long minSum=Long.MAX_VALUE;
+      long maxSum=Long.MIN_VALUE;
+      if(n%k==0){
+        for(int i=0;i<n-k+1;i+=k){
+          long sum=pre[i+k-1]-((i-1<0)?0:pre[i-1]);
+
+          minSum=Math.min(minSum, sum);
+          maxSum=Math.max(maxSum, sum);
+        }
+        ans=Math.max(maxSum-minSum, ans);
       }
     }
-    for(long x:temp){
-      res.append(x).append(" ");
-    }
-    res.append('\n');
+    res.append(ans).append('\n');
   }
 
     // Fast I/O template

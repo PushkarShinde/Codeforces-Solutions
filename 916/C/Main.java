@@ -16,29 +16,48 @@ public class Main {
     out.flush();
   }
 
+  // private static int[][] dp;
   static void solve(StringBuilder res){
     int n=in.nextInt();
-    int p=in.nextInt();
-    long[][] cost=new long[n][2];
-    for(int i=0;i<n;i++) cost[i][0]=in.nextLong();
-    for(int i=0;i<n;i++) cost[i][1]=in.nextLong();
-    Arrays.sort(cost,(x,y)-> Long.compare(x[1],y[1]));
-    long totalCost=p;
-    long left=n-1;
-    for(long[] c: cost){
-      if(left==0) break;//khatam kar diya sabh ko!
-      long a=c[0], b=c[1];
-      if(b>=p){
-        totalCost+=((long)p*left);
-        break;
-      }else{
-        long min=Math.min(a,left);
-        totalCost+=(min*b);
-        left-=min;
-      }
+    int k=in.nextInt();
+    int[] a=new int[n];
+    int[] b=new int[n];
+    for(int i=0; i<n; i++) a[i]=in.nextInt();
+    for(int i=0; i<n; i++) b[i]=in.nextInt();
+
+    int[] sum=new int[n];
+    sum[0]=a[0];
+    int[] large=new int[n];
+    large[0]=b[0];
+    for(int i=1;i<n;i++){
+      sum[i]=sum[i-1]+a[i];
+      large[i]=Math.max(large[i-1], b[i]);
     }
-    res.append(totalCost).append('\n');
+    int ans=0;
+    for(int i=0;i<Math.min(n,k);i++){
+      ans=Math.max(sum[i]+large[i]*(k-(i+1)), ans);
+    }
+
+    res.append(ans).append('\n');
+
+    // dp=new int[n+1][k+1];
+    // for(int[] d:dp){
+    //   Arrays.fill(d, -1);
+    // }
+    // res.append(a[0]+recur(a, b,0,k-1)).append('\n');
   }
+
+  /* 
+  private static int recur(int[] a, int[] b, int ind, int k){
+    int n=a.length;
+    if(ind==n || k==0) return 0;
+    if(dp[ind][k]!=-1) return dp[ind][k];
+    int stay=b[ind]+recur(a,b,ind, k-1);
+    int move=0;
+    if(ind+1<n) move=a[ind+1]+recur(a,b,ind+1, k-1);
+    return dp[ind][k]=Math.max(stay, move);
+  }
+  */
 
     // Fast I/O template
     static class FastReader {

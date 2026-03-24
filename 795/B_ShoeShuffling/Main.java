@@ -18,26 +18,34 @@ public class Main {
 
   static void solve(StringBuilder res){
     int n=in.nextInt();
-    int p=in.nextInt();
-    long[][] cost=new long[n][2];
-    for(int i=0;i<n;i++) cost[i][0]=in.nextLong();
-    for(int i=0;i<n;i++) cost[i][1]=in.nextLong();
-    Arrays.sort(cost,(x,y)-> Long.compare(x[1],y[1]));
-    long totalCost=p;
-    long left=n-1;
-    for(long[] c: cost){
-      if(left==0) break;//khatam kar diya sabh ko!
-      long a=c[0], b=c[1];
-      if(b>=p){
-        totalCost+=((long)p*left);
-        break;
-      }else{
-        long min=Math.min(a,left);
-        totalCost+=(min*b);
-        left-=min;
+    long[] a= new long[n];
+    Map<Long, List<Integer>> map=new HashMap<>();
+    for(int i=0; i<n; i++) {
+      a[i]=in.nextLong();
+      map.computeIfAbsent(a[i], k->new ArrayList<>()).add(i);
+    }
+    if(map.size()==n){
+      res.append(-1).append('\n');
+      return;
+    }
+    for(long val:map.keySet()){
+      if(map.get(val).size()==1) {
+        res.append(-1).append('\n');
+        return;
+      } 
+    }
+    int[] ans=new int[n];
+    for(long val: map.keySet()){
+      List<Integer> list=map.get(val);
+      int m=list.size();
+      for(int i=m-1;i>=0;i--){
+        ans[list.get((i+1)%m)]=list.get(i)+1;
       }
     }
-    res.append(totalCost).append('\n');
+    for(int i:ans){
+      res.append(i).append(" ");
+    }
+    res.append('\n');
   }
 
     // Fast I/O template

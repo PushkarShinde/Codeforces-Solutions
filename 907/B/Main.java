@@ -18,26 +18,57 @@ public class Main {
 
   static void solve(StringBuilder res){
     int n=in.nextInt();
-    int p=in.nextInt();
-    long[][] cost=new long[n][2];
-    for(int i=0;i<n;i++) cost[i][0]=in.nextLong();
-    for(int i=0;i<n;i++) cost[i][1]=in.nextLong();
-    Arrays.sort(cost,(x,y)-> Long.compare(x[1],y[1]));
-    long totalCost=p;
-    long left=n-1;
-    for(long[] c: cost){
-      if(left==0) break;//khatam kar diya sabh ko!
-      long a=c[0], b=c[1];
-      if(b>=p){
-        totalCost+=((long)p*left);
-        break;
-      }else{
-        long min=Math.min(a,left);
-        totalCost+=(min*b);
-        left-=min;
-      }
+    int q=in.nextInt();
+    long[][] a=new long[n][2];
+    for(int i=0; i<n; i++){
+      a[i][0]=in.nextLong();
+      a[i][1]=i;
     }
-    res.append(totalCost).append('\n');
+    int[] x=new int[q];
+    for(int i=0; i<q; i++) x[i]=in.nextInt();
+
+    Arrays.sort(a, (u,v)->{
+      if(u[0]!=v[0]) return Long.compare(u[0],v[0]);
+      return Long.compare(u[1],v[1]);
+    });
+    
+    long pre=Integer.MAX_VALUE;
+    for(int i=0;i<q;i++){
+      long num=1<<x[i];
+      if(num>=pre) continue;
+
+      long add=1<<(x[i]-1);
+      int l=0, r=n-1;
+      int start=0;
+      while(l<=r){
+        int mid=l+(r-l)/2;
+        if(a[mid][0]<num){
+          l=mid+1;
+        }else{
+          start=mid;
+          r=mid-1;
+        }
+      }
+
+      for(int j=start;j<n;j++){
+        if(a[j][0]%num==0){
+          a[j][0]+=add;
+        }
+      }
+
+      pre=num;
+    }
+
+    long[] ans=new long[n];
+    for(long[] i:a){
+      int ind=(int)i[1];
+      ans[ind]=i[0];
+    }
+
+    for(long i: ans){
+      res.append(i).append(" ");
+    }
+    res.append('\n');
   }
 
     // Fast I/O template

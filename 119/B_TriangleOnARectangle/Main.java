@@ -17,27 +17,32 @@ public class Main {
   }
 
   static void solve(StringBuilder res){
-    int n=in.nextInt();
-    int p=in.nextInt();
-    long[][] cost=new long[n][2];
-    for(int i=0;i<n;i++) cost[i][0]=in.nextLong();
-    for(int i=0;i<n;i++) cost[i][1]=in.nextLong();
-    Arrays.sort(cost,(x,y)-> Long.compare(x[1],y[1]));
-    long totalCost=p;
-    long left=n-1;
-    for(long[] c: cost){
-      if(left==0) break;//khatam kar diya sabh ko!
-      long a=c[0], b=c[1];
-      if(b>=p){
-        totalCost+=((long)p*left);
-        break;
-      }else{
-        long min=Math.min(a,left);
-        totalCost+=(min*b);
-        left-=min;
-      }
-    }
-    res.append(totalCost).append('\n');
+    int w=in.nextInt();
+    int h=in.nextInt();
+    int d=in.nextInt();
+    long[] down=new long[d];
+    for(int i = 0; i <d; i++) down[i]=in.nextLong();
+    int u=in.nextInt();
+    long[] up=new long[u];
+    for(int i = 0; i <u; i++) up[i]=in.nextLong();
+    int l=in.nextInt();
+    long[] left=new long[l];
+    for(int i = 0; i <l; i++) left[i]=in.nextLong();
+    int r=in.nextInt();
+    long[] right=new long[r];
+    for(int i = 0; i <r; i++) right[i]=in.nextLong();
+    long area=Long.MIN_VALUE/2;
+    
+    long base1=down[d-1]-down[0];
+    area=Math.max(base1*h, area);
+    long base2=up[u-1]-up[0];
+    area=Math.max(base2*h, area);
+    long base3=left[l-1]-left[0];
+    area=Math.max(base3*w, area);
+    long base4=right[r-1]-right[0];
+    area=Math.max(base4*w, area);
+
+    res.append(area).append('\n');
   }
 
     // Fast I/O template

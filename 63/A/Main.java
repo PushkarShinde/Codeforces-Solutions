@@ -7,37 +7,35 @@ public class Main {
   static PrintWriter out = new PrintWriter(System.out);
 
   public static void main(String[] args) throws Exception {
-    int t=in.nextInt(); 
     StringBuilder res=new StringBuilder();
-    while (t-- > 0) {
-      solve(res);
-    }
-    System.out.println(res);
-    out.flush();
-  }
-
-  static void solve(StringBuilder res){
     int n=in.nextInt();
-    int p=in.nextInt();
-    long[][] cost=new long[n][2];
-    for(int i=0;i<n;i++) cost[i][0]=in.nextLong();
-    for(int i=0;i<n;i++) cost[i][1]=in.nextLong();
-    Arrays.sort(cost,(x,y)-> Long.compare(x[1],y[1]));
-    long totalCost=p;
-    long left=n-1;
-    for(long[] c: cost){
-      if(left==0) break;//khatam kar diya sabh ko!
-      long a=c[0], b=c[1];
-      if(b>=p){
-        totalCost+=((long)p*left);
-        break;
-      }else{
-        long min=Math.min(a,left);
-        totalCost+=(min*b);
-        left-=min;
-      }
+    String s=in.next();
+    if(sorted(s)) {
+        res.append("NO\n");
+        System.out.println(res);
+        return;
     }
-    res.append(totalCost).append('\n');
+    for(int i=1;i<n;i++){
+        if(s.charAt(i)<s.charAt(i-1)){
+            res.append("YES\n");
+            res.append(i).append(" ").append(i+1).append('\n');
+            System.out.println(res);
+            return;
+        }
+    }
+    System.out.println("NO\n");
+    System.out.println(res);
+}
+
+private static boolean sorted(String s){
+    int n=s.length();
+    char pre=s.charAt(0);
+    for(int i=1;i<n;i++){
+        char cur=s.charAt(i);
+        if(cur<pre) return false;
+        pre=cur;
+    }
+    return true;
   }
 
     // Fast I/O template

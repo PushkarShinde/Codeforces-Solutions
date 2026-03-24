@@ -18,26 +18,43 @@ public class Main {
 
   static void solve(StringBuilder res){
     int n=in.nextInt();
-    int p=in.nextInt();
-    long[][] cost=new long[n][2];
-    for(int i=0;i<n;i++) cost[i][0]=in.nextLong();
-    for(int i=0;i<n;i++) cost[i][1]=in.nextLong();
-    Arrays.sort(cost,(x,y)-> Long.compare(x[1],y[1]));
-    long totalCost=p;
-    long left=n-1;
-    for(long[] c: cost){
-      if(left==0) break;//khatam kar diya sabh ko!
-      long a=c[0], b=c[1];
-      if(b>=p){
-        totalCost+=((long)p*left);
-        break;
+    int[] a=new int[n];
+    for(int i=0; i<n; i++) a[i]=in.nextInt();
+    int[][] b=new int[n][2];
+    for(int i=0;i<n;i++){
+      b[i][0]=a[i];
+      b[i][1]=i;
+    }
+    Arrays.sort(b, (x,y)->{
+      if(x[0]!=y[0]) return x[0]-y[0];
+      return x[1]-y[1];
+    });
+    long[] sum=new long[n];
+    sum[0]=b[0][0];
+    for(int i=1;i<n;i++){
+      sum[i]=sum[i-1]+(long)b[i][0];
+    }
+
+    
+    int[] reach=new int[n];
+    reach[n-1]=n-1;
+    int ans=0;
+    for(int i=n-2;i>=0;i--){
+      if(sum[i]>=b[i+1][0]){
+        reach[i]=reach[i+1];
       }else{
-        long min=Math.min(a,left);
-        totalCost+=(min*b);
-        left-=min;
+        reach[i]=i;
       }
     }
-    res.append(totalCost).append('\n');
+
+    int[] result=new int[n];
+    for(int i=0;i<n;i++){
+      result[b[i][1]]=reach[i];
+    }
+    for(int i:result){
+      res.append(i).append(" ");
+    }
+    res.append('\n');
   }
 
     // Fast I/O template

@@ -17,27 +17,48 @@ public class Main {
   }
 
   static void solve(StringBuilder res){
-    int n=in.nextInt();
-    int p=in.nextInt();
-    long[][] cost=new long[n][2];
-    for(int i=0;i<n;i++) cost[i][0]=in.nextLong();
-    for(int i=0;i<n;i++) cost[i][1]=in.nextLong();
-    Arrays.sort(cost,(x,y)-> Long.compare(x[1],y[1]));
-    long totalCost=p;
-    long left=n-1;
-    for(long[] c: cost){
-      if(left==0) break;//khatam kar diya sabh ko!
-      long a=c[0], b=c[1];
-      if(b>=p){
-        totalCost+=((long)p*left);
-        break;
-      }else{
-        long min=Math.min(a,left);
-        totalCost+=(min*b);
-        left-=min;
-      }
+    int n = in.nextInt();
+    int[] a = new int[n];
+    for(int i = 0; i < n; i++){
+        a[i] = in.nextInt();
     }
-    res.append(totalCost).append('\n');
+
+    int INF = (int)1e9;
+    int[] prev = new int[7];
+    int[] curr = new int[7];
+
+    // base case
+    for(int v = 1; v <= 6; v++){
+        prev[v] = (a[0] == v ? 0 : 1);
+    }
+
+    for(int i = 1; i < n; i++){
+        for(int v = 1; v <= 6; v++){
+            curr[v] = INF;
+        }
+
+        for(int v = 1; v <= 6; v++){
+            int cost = (a[i] == v ? 0 : 1);
+
+            for(int u = 1; u <= 6; u++){
+                if(u == v) continue;
+                if(u + v == 7) continue;
+
+                curr[v] = Math.min(curr[v], prev[u] + cost);
+            }
+        }
+
+        int[] temp = prev;
+        prev = curr;
+        curr = temp;
+    }
+
+    int ans = INF;
+    for(int v = 1; v <= 6; v++){
+        ans = Math.min(ans, prev[v]);
+    }
+
+    res.append(ans).append('\n');
   }
 
     // Fast I/O template

@@ -7,37 +7,25 @@ public class Main {
   static PrintWriter out = new PrintWriter(System.out);
 
   public static void main(String[] args) throws Exception {
-    int t=in.nextInt(); 
     StringBuilder res=new StringBuilder();
-    while (t-- > 0) {
-      solve(res);
-    }
-    System.out.println(res);
-    out.flush();
-  }
-
-  static void solve(StringBuilder res){
     int n=in.nextInt();
-    int p=in.nextInt();
-    long[][] cost=new long[n][2];
-    for(int i=0;i<n;i++) cost[i][0]=in.nextLong();
-    for(int i=0;i<n;i++) cost[i][1]=in.nextLong();
-    Arrays.sort(cost,(x,y)-> Long.compare(x[1],y[1]));
-    long totalCost=p;
-    long left=n-1;
-    for(long[] c: cost){
-      if(left==0) break;//khatam kar diya sabh ko!
-      long a=c[0], b=c[1];
-      if(b>=p){
-        totalCost+=((long)p*left);
+    long d=in.nextLong();
+    long[] a= new long[n];
+    for(int i = 0; i < n; i++) a[i]=in.nextLong();
+    Arrays.sort(a);
+    long total=(long)n;
+    long count=0;
+    for(int i=n-1;i>=0;i--){
+      long num=(d/a[i])+1;
+      if(total>=num){
+        count++;
+        total-=num;
+      } else{
         break;
-      }else{
-        long min=Math.min(a,left);
-        totalCost+=(min*b);
-        left-=min;
       }
     }
-    res.append(totalCost).append('\n');
+    res.append(count).append('\n');
+    System.out.println(res);
   }
 
     // Fast I/O template

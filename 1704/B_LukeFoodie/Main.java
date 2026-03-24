@@ -18,26 +18,22 @@ public class Main {
 
   static void solve(StringBuilder res){
     int n=in.nextInt();
-    int p=in.nextInt();
-    long[][] cost=new long[n][2];
-    for(int i=0;i<n;i++) cost[i][0]=in.nextLong();
-    for(int i=0;i<n;i++) cost[i][1]=in.nextLong();
-    Arrays.sort(cost,(x,y)-> Long.compare(x[1],y[1]));
-    long totalCost=p;
-    long left=n-1;
-    for(long[] c: cost){
-      if(left==0) break;//khatam kar diya sabh ko!
-      long a=c[0], b=c[1];
-      if(b>=p){
-        totalCost+=((long)p*left);
-        break;
-      }else{
-        long min=Math.min(a,left);
-        totalCost+=(min*b);
-        left-=min;
+    long x=in.nextLong();
+    long[] a= new long[n];
+    for(int i = 0; i < n; i++) a[i]=in.nextLong();
+    long l=a[0];
+    long r=a[0];
+    int ans=0;
+    for(int i=1;i<n;i++){
+      if(l>a[i]) l=a[i];
+      if(r<a[i]) r=a[i];
+      if(r-l>2*x){
+        ans++;
+        r=a[i];
+        l=a[i];
       }
     }
-    res.append(totalCost).append('\n');
+    res.append(ans).append('\n');
   }
 
     // Fast I/O template

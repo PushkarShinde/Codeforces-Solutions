@@ -18,26 +18,29 @@ public class Main {
 
   static void solve(StringBuilder res){
     int n=in.nextInt();
-    int p=in.nextInt();
-    long[][] cost=new long[n][2];
-    for(int i=0;i<n;i++) cost[i][0]=in.nextLong();
-    for(int i=0;i<n;i++) cost[i][1]=in.nextLong();
-    Arrays.sort(cost,(x,y)-> Long.compare(x[1],y[1]));
-    long totalCost=p;
-    long left=n-1;
-    for(long[] c: cost){
-      if(left==0) break;//khatam kar diya sabh ko!
-      long a=c[0], b=c[1];
-      if(b>=p){
-        totalCost+=((long)p*left);
+    String c=in.next();
+    char[] s=in.next().toCharArray();
+    int[] g=new int[n];
+    int fg=0;
+    for(int i=0;i<n;i++){
+      if(s[i]=='g') {
+        fg=i; 
         break;
-      }else{
-        long min=Math.min(a,left);
-        totalCost+=(min*b);
-        left-=min;
       }
     }
-    res.append(totalCost).append('\n');
+    for(int i=n-1;i>=0;i--){
+      if(s[i]=='g'){
+        fg=i;
+        g[i]=fg;
+      }else{
+        g[i]=fg;
+      }
+    }
+    int maxDist=0;
+    for(int i=0;i<n;i++){
+      if(s[i]==c.charAt(0))maxDist=Math.max(maxDist,(g[i]-i+n)%n);
+    }
+    res.append(maxDist).append('\n');
   }
 
     // Fast I/O template

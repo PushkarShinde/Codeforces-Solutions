@@ -18,27 +18,37 @@ public class Main {
 
   static void solve(StringBuilder res){
     int n=in.nextInt();
-    int p=in.nextInt();
-    long[][] cost=new long[n][2];
-    for(int i=0;i<n;i++) cost[i][0]=in.nextLong();
-    for(int i=0;i<n;i++) cost[i][1]=in.nextLong();
-    Arrays.sort(cost,(x,y)-> Long.compare(x[1],y[1]));
-    long totalCost=p;
-    long left=n-1;
-    for(long[] c: cost){
-      if(left==0) break;//khatam kar diya sabh ko!
-      long a=c[0], b=c[1];
-      if(b>=p){
-        totalCost+=((long)p*left);
-        break;
-      }else{
-        long min=Math.min(a,left);
-        totalCost+=(min*b);
-        left-=min;
-      }
+    long k=in.nextLong();
+    long b=in.nextLong();
+    long s=in.nextLong();
+
+    long d=Math.abs(s-b*k);
+    if(s<k*b || s>(k*b+n*(k-1))) {
+        res.append(-1).append('\n');
+        return;
     }
-    res.append(totalCost).append('\n');
-  }
+    long[] a=new long[n];   
+    long remain=s;
+    long beauty=b; 
+    for(int i=0;i<n;i++){
+        if(beauty>0){
+            long baseVal=beauty*k;
+            long extra=Math.min(k-1, remain-baseVal);
+            a[i]=Math.min(baseVal+extra, remain);
+            long actual=a[i]/k;
+            beauty-=actual;
+            remain-=a[i];
+        }else{
+            long canGive=Math.min(k-1, remain);
+            a[i]=canGive;
+            remain-=a[i];
+        }
+    }
+    for(long i: a){
+        res.append(i).append(" ");
+    }
+    res.append('\n');
+}
 
     // Fast I/O template
     static class FastReader {
@@ -74,7 +84,7 @@ public class Main {
 
     // GCD
     static long gcd(long a, long b) {
-        return b == 0 ? a : gcd(b, a % b);
+        return b==0?a:gcd(b,a%b);
     }
 
     // LCM

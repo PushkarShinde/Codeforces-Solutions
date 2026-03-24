@@ -18,26 +18,32 @@ public class Main {
 
   static void solve(StringBuilder res){
     int n=in.nextInt();
-    int p=in.nextInt();
-    long[][] cost=new long[n][2];
-    for(int i=0;i<n;i++) cost[i][0]=in.nextLong();
-    for(int i=0;i<n;i++) cost[i][1]=in.nextLong();
-    Arrays.sort(cost,(x,y)-> Long.compare(x[1],y[1]));
-    long totalCost=p;
-    long left=n-1;
-    for(long[] c: cost){
-      if(left==0) break;//khatam kar diya sabh ko!
-      long a=c[0], b=c[1];
-      if(b>=p){
-        totalCost+=((long)p*left);
-        break;
-      }else{
-        long min=Math.min(a,left);
-        totalCost+=(min*b);
-        left-=min;
-      }
+    // long[] b= new long[n];
+    Set<Long>set=new HashSet<>();
+    for(int i = 0; i < n; i++){
+      // b[i]=in.nextLong();
+      set.add(in.nextLong());
     }
-    res.append(totalCost).append('\n');
+    res.append(set.size()==n?"NO\n":"YES\n");
+    // long[] pre=new long[n+1];
+    // for(int i=1;i<=n;i++){
+    //   pre[i]=pre[i-1]+b[i-1];
+    // }
+    // Map<Long, Integer>map=new HashMap<>();
+    // for(int i=1;i<=n;i++){
+    //   for(int j=i;j<=n;j++){
+    //     long sum=pre[j]-pre[i-1];
+    //     if(map.containsKey(sum)){
+    //       if(map.get(sum)<i){
+    //         res.append("YES\n");
+    //         return;
+    //       }
+    //     }else{
+    //       map.put(sum,j);
+    //     }
+    //   }
+    // }
+    // res.append("NO\n");
   }
 
     // Fast I/O template

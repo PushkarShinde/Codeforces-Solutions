@@ -18,26 +18,32 @@ public class Main {
 
   static void solve(StringBuilder res){
     int n=in.nextInt();
-    int p=in.nextInt();
-    long[][] cost=new long[n][2];
-    for(int i=0;i<n;i++) cost[i][0]=in.nextLong();
-    for(int i=0;i<n;i++) cost[i][1]=in.nextLong();
-    Arrays.sort(cost,(x,y)-> Long.compare(x[1],y[1]));
-    long totalCost=p;
-    long left=n-1;
-    for(long[] c: cost){
-      if(left==0) break;//khatam kar diya sabh ko!
-      long a=c[0], b=c[1];
-      if(b>=p){
-        totalCost+=((long)p*left);
+    long[] a= new long[n];
+    for(int i = 0; i < n; i++) a[i]=in.nextLong();
+    long num=n;
+    for(int i=0;i<n;i++){
+      if(a[i]!=num){
+        int j=i+1;
+        while(j<n && a[j]!=num){
+          j++;
+        }
+        reverse(a,i,j);
         break;
-      }else{
-        long min=Math.min(a,left);
-        totalCost+=(min*b);
-        left-=min;
       }
+      num--;
     }
-    res.append(totalCost).append('\n');
+    for(long i:a){
+      res.append(i).append(" ");
+    }
+    res.append('\n');
+  }
+  private static void reverse(long[] a, int l, int r){
+    while(l<r){
+      long temp=a[l];
+      a[l]=a[r];
+      a[r]=temp;
+      l++; r--;
+    }
   }
 
     // Fast I/O template

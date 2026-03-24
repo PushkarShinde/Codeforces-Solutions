@@ -17,27 +17,19 @@ public class Main {
   }
 
   static void solve(StringBuilder res){
-    int n=in.nextInt();
-    int p=in.nextInt();
-    long[][] cost=new long[n][2];
-    for(int i=0;i<n;i++) cost[i][0]=in.nextLong();
-    for(int i=0;i<n;i++) cost[i][1]=in.nextLong();
-    Arrays.sort(cost,(x,y)-> Long.compare(x[1],y[1]));
-    long totalCost=p;
-    long left=n-1;
-    for(long[] c: cost){
-      if(left==0) break;//khatam kar diya sabh ko!
-      long a=c[0], b=c[1];
-      if(b>=p){
-        totalCost+=((long)p*left);
+    long n=in.nextLong();
+    if(n%2==0){
+      res.append(n/2).append(" ").append(n/2).append('\n');
+      return;
+    }
+    long x=1;
+    for(int g=2;g*g<=n;g++){
+      if(n%g==0){
+        x=n/g;
         break;
-      }else{
-        long min=Math.min(a,left);
-        totalCost+=(min*b);
-        left-=min;
       }
     }
-    res.append(totalCost).append('\n');
+    res.append(x).append(" ").append(n-x).append('\n');
   }
 
     // Fast I/O template

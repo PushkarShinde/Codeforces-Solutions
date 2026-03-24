@@ -18,26 +18,37 @@ public class Main {
 
   static void solve(StringBuilder res){
     int n=in.nextInt();
-    int p=in.nextInt();
-    long[][] cost=new long[n][2];
-    for(int i=0;i<n;i++) cost[i][0]=in.nextLong();
-    for(int i=0;i<n;i++) cost[i][1]=in.nextLong();
-    Arrays.sort(cost,(x,y)-> Long.compare(x[1],y[1]));
-    long totalCost=p;
-    long left=n-1;
-    for(long[] c: cost){
-      if(left==0) break;//khatam kar diya sabh ko!
-      long a=c[0], b=c[1];
-      if(b>=p){
-        totalCost+=((long)p*left);
-        break;
-      }else{
-        long min=Math.min(a,left);
-        totalCost+=(min*b);
-        left-=min;
+    long[] secmin=new long[n];
+    long min=Long.MAX_VALUE;
+    for(int i=0;i<n;i++){
+      int m=in.nextInt();
+      long[] a= new long[m];
+      long minValue=Long.MAX_VALUE;
+      int minInd=0;
+      long sec=Long.MAX_VALUE;
+      for(int j= 0;j<m;j++) {
+        a[j]=in.nextLong();
+        if(minValue>a[j]){
+          minValue=a[j];
+          minInd=j;
+        }
       }
+      a[minInd]=Long.MAX_VALUE;
+      for(long j:a){
+        sec=Math.min(j,sec);
+      }
+      secmin[i]=sec;
+      min=Math.min(min,minValue);
     }
-    res.append(totalCost).append('\n');
+    long ans=0;
+    long minsec=Long.MAX_VALUE;
+    for(long i: secmin){
+      ans+=i;
+      minsec=Math.min(minsec,i);
+    }
+    ans-=minsec;
+    ans+=min;
+    res.append(ans).append('\n');
   }
 
     // Fast I/O template

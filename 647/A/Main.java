@@ -15,29 +15,33 @@ public class Main {
     System.out.println(res);
     out.flush();
   }
-
-  static void solve(StringBuilder res){
-    int n=in.nextInt();
-    int p=in.nextInt();
-    long[][] cost=new long[n][2];
-    for(int i=0;i<n;i++) cost[i][0]=in.nextLong();
-    for(int i=0;i<n;i++) cost[i][1]=in.nextLong();
-    Arrays.sort(cost,(x,y)-> Long.compare(x[1],y[1]));
-    long totalCost=p;
-    long left=n-1;
-    for(long[] c: cost){
-      if(left==0) break;//khatam kar diya sabh ko!
-      long a=c[0], b=c[1];
-      if(b>=p){
-        totalCost+=((long)p*left);
-        break;
-      }else{
-        long min=Math.min(a,left);
-        totalCost+=(min*b);
-        left-=min;
-      }
+  static long getR(long a){
+    while (a%2==0) {
+      a/=2;
     }
-    res.append(totalCost).append('\n');
+    return a;
+  } 
+  static void solve(StringBuilder res){
+    long a=in.nextLong();
+    long b=in.nextLong();
+    if(a>b){
+      long temp=a;
+      a=b;
+      b=temp;
+    }
+    long r=getR(a);
+    if(getR(b)!=r){
+      res.append(-1).append('\n');
+      return;
+    }
+    long ops=0;
+    b/=a;
+    while(b>=8){
+      b/=8;
+      ops++;
+    }
+    if(b>1) ops++;
+    res.append(ops).append('\n');
   }
 
     // Fast I/O template

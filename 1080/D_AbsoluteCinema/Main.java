@@ -18,26 +18,35 @@ public class Main {
 
   static void solve(StringBuilder res){
     int n=in.nextInt();
-    int p=in.nextInt();
-    long[][] cost=new long[n][2];
-    for(int i=0;i<n;i++) cost[i][0]=in.nextLong();
-    for(int i=0;i<n;i++) cost[i][1]=in.nextLong();
-    Arrays.sort(cost,(x,y)-> Long.compare(x[1],y[1]));
-    long totalCost=p;
-    long left=n-1;
-    for(long[] c: cost){
-      if(left==0) break;//khatam kar diya sabh ko!
-      long a=c[0], b=c[1];
-      if(b>=p){
-        totalCost+=((long)p*left);
-        break;
-      }else{
-        long min=Math.min(a,left);
-        totalCost+=(min*b);
-        left-=min;
-      }
+    long[] f= new long[n];
+    for(int i=0; i<n; i++) f[i]=in.nextLong();
+    long[] ans=new long[n];
+    
+    //a2--an-1
+    for(int x=1;x<n-1;x++){
+        long fxb=(x-1>=0)?f[x-1]:0;
+        long fxf=(x+1<n)?f[x+1]:0;
+        long ax=(fxb+fxf-2*f[x])/2;
+        ans[x]=ax;
     }
-    res.append(totalCost).append('\n');
+
+    //an
+    long dif=0;
+    for(int i=1;i<n-1;i++){
+        dif+=(i)*ans[i];
+    }
+    ans[n-1]=(f[0]-dif)/(n-1);
+    //a1
+    dif=0;
+    for(int i=1;i<n-1;i++){
+        dif+=(n-(i+1))*ans[i];
+    }
+    ans[0]=(f[n-1]-dif)/(n-1);
+
+    for(int i=0;i<n;i++){
+        res.append(ans[i]).append(" ");
+    }
+    res.append('\n');
   }
 
     // Fast I/O template

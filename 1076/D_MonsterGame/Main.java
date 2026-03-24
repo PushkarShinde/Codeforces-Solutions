@@ -18,26 +18,32 @@ public class Main {
 
   static void solve(StringBuilder res){
     int n=in.nextInt();
-    int p=in.nextInt();
-    long[][] cost=new long[n][2];
-    for(int i=0;i<n;i++) cost[i][0]=in.nextLong();
-    for(int i=0;i<n;i++) cost[i][1]=in.nextLong();
-    Arrays.sort(cost,(x,y)-> Long.compare(x[1],y[1]));
-    long totalCost=p;
-    long left=n-1;
-    for(long[] c: cost){
-      if(left==0) break;//khatam kar diya sabh ko!
-      long a=c[0], b=c[1];
-      if(b>=p){
-        totalCost+=((long)p*left);
-        break;
-      }else{
-        long min=Math.min(a,left);
-        totalCost+=(min*b);
-        left-=min;
-      }
+    TreeMap<Long, Integer> swords=new TreeMap<>();
+    long[] a= new long[n];
+    long maxSword=Integer.MIN_VALUE;
+    for(int i = 0; i < n; i++) {
+      a[i]=in.nextLong();
+      maxSword=Math.max(maxSword, a[i]);
+      swords.put(a[i], swords.getOrDefault(a[i],0)+1);
     }
-    res.append(totalCost).append('\n');
+    long[] b= new long[n];
+    for(int i = 0; i < n; i++) b[i]=in.nextLong();
+    int level=1;
+    while(level<n){
+      Long sword=swords.ceilingKey((long)level);
+      if(sword==null) break;
+      while(b[level-1]>0){
+        b[level-1]--;
+        swords.put(sword, swords.get(sword)-1);
+        if(swords.get(sword)==0){
+          swords.remove(sword);
+          break;
+        }
+      }
+      if(b[level-1]==0) level++;
+    }
+    long ans=level*maxSword;
+    res.append(maxSword).append('\n');
   }
 
     // Fast I/O template

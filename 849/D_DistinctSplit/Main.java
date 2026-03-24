@@ -18,26 +18,24 @@ public class Main {
 
   static void solve(StringBuilder res){
     int n=in.nextInt();
-    int p=in.nextInt();
-    long[][] cost=new long[n][2];
-    for(int i=0;i<n;i++) cost[i][0]=in.nextLong();
-    for(int i=0;i<n;i++) cost[i][1]=in.nextLong();
-    Arrays.sort(cost,(x,y)-> Long.compare(x[1],y[1]));
-    long totalCost=p;
-    long left=n-1;
-    for(long[] c: cost){
-      if(left==0) break;//khatam kar diya sabh ko!
-      long a=c[0], b=c[1];
-      if(b>=p){
-        totalCost+=((long)p*left);
-        break;
-      }else{
-        long min=Math.min(a,left);
-        totalCost+=(min*b);
-        left-=min;
-      }
+    String s=in.next();
+    Map<Character, Integer> right=new HashMap<>();
+    for(char c:s.toCharArray()){
+      right.put(c,right.getOrDefault(c,0)+1);
     }
-    res.append(totalCost).append('\n');
+    Map<Character, Integer> left=new HashMap<>();
+    int ans=0;
+    for(int i=0;i<n-1;i++){
+      char c=s.charAt(i);
+      left.put(c,left.getOrDefault(c,0)+1);
+      if(right.get(c)==1){
+        right.remove(c);
+      }else{
+        right.put(c,right.get(c)-1);
+      }
+      ans=Math.max(ans,left.size()+right.size());
+    }
+    res.append(ans).append('\n');
   }
 
     // Fast I/O template

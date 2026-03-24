@@ -18,26 +18,41 @@ public class Main {
 
   static void solve(StringBuilder res){
     int n=in.nextInt();
-    int p=in.nextInt();
-    long[][] cost=new long[n][2];
-    for(int i=0;i<n;i++) cost[i][0]=in.nextLong();
-    for(int i=0;i<n;i++) cost[i][1]=in.nextLong();
-    Arrays.sort(cost,(x,y)-> Long.compare(x[1],y[1]));
-    long totalCost=p;
-    long left=n-1;
-    for(long[] c: cost){
-      if(left==0) break;//khatam kar diya sabh ko!
-      long a=c[0], b=c[1];
-      if(b>=p){
-        totalCost+=((long)p*left);
-        break;
-      }else{
-        long min=Math.min(a,left);
-        totalCost+=(min*b);
-        left-=min;
-      }
+    int ans=-1;
+    boolean found=false;
+    for(int i=1;i<n;i++){
+        int u=2*i+1;
+        int v=2*i+2;
+        System.out.println("? "+u+" "+v);
+        System.out.flush();
+        int response=in.nextInt();
+        if(response==-1) System.exit(0);
+
+        if(response==1){
+            ans=u;
+            found=true;
+            break;
+        }
+
     }
-    res.append(totalCost).append('\n');
+    if(found){
+        System.out.println("? 1 3");
+        System.out.flush();
+        if(in.nextInt()==1){
+            ans=1;
+        }else{
+            System.out.println("? 1 4");
+            System.out.flush();
+            if(in.nextInt()==1){
+                ans=1;
+            }else{
+                ans=2;
+            }
+        }
+    }
+    System.out.println("! "+ans);
+    System.out.println("\n");
+    System.out.flush();
   }
 
     // Fast I/O template
