@@ -19,8 +19,22 @@ public class Main {
   static void solve(StringBuilder res){
     int n=in.nextInt();
     long[] a=new long[n];
+    long[] b=new long[n];
     for(int i=0; i<n; i++) a[i]=in.nextLong();
-    
+    for(int i=0; i<n; i++) b[i]=in.nextLong();
+
+    int count=0;
+    if(gcd(a[0], a[1])<a[0]) count++;
+
+    if(gcd(a[n-2], a[n-1])<a[n-1]) count++;
+
+    for(int i=1; i<n-1; i++){
+      long A=gcd(a[i-1], a[i]);
+      long B=gcd(a[i], a[i+1]);
+      long lcm=lcm(A, B);
+      if(lcm<a[i]) count++;
+    }
+    res.append(count).append('\n');
   }
 
     // Fast I/O template
