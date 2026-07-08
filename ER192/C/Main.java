@@ -23,27 +23,49 @@ public class Main {
     int k=in.nextInt();
     int[] a=new int[n];
     for(int i=0; i<n; i++) a[i]=in.nextInt();
-    Map<Integer, Integer> map=new HashMap<>();
-    for(int i:a){
-      map.put(i,map.getOrDefault(i,0)+1);
-    }
-
-    int d=map.size();
-
-    if(k==n){
-      res.append(1+"\n");
-      return;
-    }
-    if(k<n){
-      if((n-k)%d==0){
-        res.append(((n-k)%d==0?1:0)+"\n");
-        return;
+    List<Integer> fre= new ArrayList<>();
+    int count = 1;
+    for (int i = 1; i < n; i++) {
+      if (a[i] == a[i - 1]) {
+        count++;
+      } else {
+        fre.add(count);
+        count = 1;
       }
     }
+    fre.add(count);
 
-    while(d>0){
-      
+    Map<Integer, Integer> map=new HashMap<>();
+    for (int f : fre) {
+      map.put(f, map.getOrDefault(f, 0) + 1);
     }
+    
+    List<Integer> unique= new ArrayList<>(map.keySet());
+    Collections.sort(unique);
+
+    long d=fre.size();
+    long s=n;
+    long ans=0;
+
+    for(int j=0;j<unique.size();j++){
+      int next=unique.get(j);
+      
+      long req=1-next;//min delta required to not destroy the element with frequency next
+      long dif=k-s;
+
+      if(dif%d==0){
+        long delta=dif/d;
+        if(delta>=req){
+          ans++;
+        }
+      }
+      
+      long cnt=map.get(next);
+      d-=cnt;
+      s-=cnt*next;
+    }
+
+    res.append(ans).append("\n");
   }
 
     static class FastReader {
